@@ -3,9 +3,11 @@
     "version": "1.0.0",
     "scripts": {
         "start": "nodemon ./src/server/index.ts",
+        "start:bug": "set BUG_ID=1 && nodemon ./src/server/index.ts",
         "test:unit": "jest",
-        "test:e2e": "node_modules/.bin/hermione",
-        "test:e2e:gui": "node_modules/.bin/hermione gui",
+        "test:e2e": "hermione",
+        "test:e2e:gui": "hermione gui",
+        "test:e2e:update": "hermione --update-refs",
         "test": "npm run test:unit && npm run test:e2e",
         "build": "webpack --mode=production --node-env=production",
         "watch": "webpack --watch"
