@@ -32,6 +32,9 @@ const mockProducts = [
     price: 781,
   },
 ];
+
+const cartItemsMock = {key: 'example-store-cart', data: {"1":{"name":"Awesome Sausages","count":1,"price":565}}};
+
 module.exports = {
-  baseUrl, mockProducts
+  baseUrl, mockProducts, cartItemsMock
 };
