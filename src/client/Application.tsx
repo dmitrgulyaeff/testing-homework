@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import React, { FC, useCallback, useState } from 'react';
 import { Switch, Route } from 'react-router';
 import { Link, NavLink } from 'react-router-dom';
