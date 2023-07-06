@@ -5,7 +5,7 @@ const widths = [1920, 1280, 768, 575];
 
 const routes = ['', 'delivery', 'cart', 'contacts', 'catalog'];
 
-describe('Проверка адаптивности сайта', function () {
+describe('Проверка сайта скриншотами', function () {
   for (const route of routes) {
     for (const width of widths) {
       it(`маршрут /${route} корректно отображен при ширине ${width}`, async function () {
