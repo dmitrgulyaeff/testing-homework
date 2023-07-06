@@ -56,7 +56,7 @@ describe('Корзина', async function () {
     // Сравниваем два состояния страницы на эквивалентность
     assert.equal(stateBeforeReload, stateAfterReload);
   });
-  it('валидация формы должна работать корректно со стороны фронта', async function () {
+  it('оформление заказа', async function () {
     const puppeteer = await this.browser.getPuppeteer();
     const [page] = await puppeteer.pages();
 
@@ -91,13 +91,22 @@ describe('Корзина', async function () {
     await cartAddress.setValue('address');
 
     await btnFormSubmit.click();
+    
+    const btnFormSubmitAfterClick = await this.browser.$('.Form-Submit');
+    const btnFormSubmitExist = await btnFormSubmitAfterClick.isExisting();
+    if (btnFormSubmitExist) {
+      const isDisabledBtnForm = await btnFormSubmitAfterClick.getAttribute(
+        'disabled'
+      );
+      assert.notEqual(isDisabledBtnForm, '', 'кнопка формы работает неверно');
 
-    // количество невалидных полей после оформления заказа
-    assert.equal(
-      await this.browser.$$('.invalid-feedback').length,
-      0,
-      'невозможно оформить заказ, из-за неверной валидации на фронте'
-    );
+      // количество невалидных полей после оформления заказа
+      assert.equal(
+        await this.browser.$$('.invalid-feedback').length,
+        0,
+        'невозможно оформить заказ, из-за неверной валидации на фронте'
+      );
+    }
 
     const cartSuccessMessage = await this.browser.$('.Cart-SuccessMessage');
     const classList = await cartSuccessMessage.getAttribute('class');
