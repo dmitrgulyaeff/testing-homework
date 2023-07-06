@@ -25,5 +25,5 @@ module.exports = {
       enabled: true, // указывает включение плагина html-reporter/hermione
     },
   },
-
+  retry: 2,
 };
