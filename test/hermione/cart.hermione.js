@@ -39,7 +39,7 @@ describe('Корзина', async function () {
     }, cartItemsMock);
 
     await page.goto(`${baseUrl}cart`);
-    
+
     // Сохраняем состояние страницы до обновления
     const stateBeforeReload = await page.evaluate(() => {
       return document.documentElement.innerHTML;
@@ -55,5 +55,56 @@ describe('Корзина', async function () {
 
     // Сравниваем два состояния страницы на эквивалентность
     assert.equal(stateBeforeReload, stateAfterReload);
+  });
+  it('валидация формы должна работать корректно со стороны фронта', async function () {
+    const puppeteer = await this.browser.getPuppeteer();
+    const [page] = await puppeteer.pages();
+
+    await page.goto(baseUrl);
+
+    await page.evaluate((cartItemsMock) => {
+      window.localStorage.setItem(
+        cartItemsMock.key,
+        JSON.stringify(cartItemsMock.data)
+      );
+    }, cartItemsMock);
+
+    await page.goto(`${baseUrl}cart`);
+    const btnFormSubmit = await this.browser.$('.Form-Submit');
+    await btnFormSubmit.click();
+
+    const invalidFields = await this.browser.$$('.invalid-feedback');
+    assert.equal(invalidFields.length, 3, 'количество невалидных полей');
+
+    for (const element of invalidFields) {
+      const display = await element.getCSSProperty('display');
+      assert.equal(display.value, 'block', 'неверный display у поля ошибки');
+    }
+
+    const cartName = await this.browser.$('#f-name');
+    await cartName.setValue('name');
+
+    const cartPhone = await this.browser.$('#f-phone');
+    await cartPhone.setValue('+79998887766');
+
+    const cartAddress = await this.browser.$('#f-address');
+    await cartAddress.setValue('address');
+
+    await btnFormSubmit.click();
+
+    // количество невалидных полей после оформления заказа
+    assert.equal(
+      await this.browser.$$('.invalid-feedback').length,
+      0,
+      'невозможно оформить заказ, из-за неверной валидации на фронте'
+    );
+
+    const cartSuccessMessage = await this.browser.$('.Cart-SuccessMessage');
+    const classList = await cartSuccessMessage.getAttribute('class');
+    assert.include(
+      classList,
+      'alert-success',
+      'класс сообщения указан неверно'
+    );
   });
 });
