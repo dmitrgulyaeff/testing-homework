@@ -1,7 +1,6 @@
 import renderPage from '../helpers/renderPage';
 import { Product } from '../../src/common/types';
 import { ApplicationState } from '../../src/client/store';
-import { screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 describe('Каталог[id]', () => {
