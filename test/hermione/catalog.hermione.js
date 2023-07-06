@@ -10,9 +10,14 @@ describe('Каталог', async function () {
     const btnAddToCart = await this.browser.$('.ProductDetails-AddToCart');
     await btnAddToCart.click();
 
-    const cartBefore = await page.evaluate((cartItemsMock) => {
-      return JSON.parse(localStorage.getItem(cartItemsMock.key))['0']['count'];
+    const localValueBefore = await page.evaluate((cartItemsMock) => {
+      return JSON.parse(localStorage.getItem(cartItemsMock.key));
     }, cartItemsMock);
+
+    assert.isNotNull(localValueBefore, 'не добавляется в корзину')
+    assert.isNotEmpty(localValueBefore, 'добавляется пустой объект')
+
+    const cartBefore = await localValueBefore['0']['count'];
 
     await btnAddToCart.click();
     await btnAddToCart.click();
