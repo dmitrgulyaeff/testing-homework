@@ -1,16 +1,36 @@
 const request = require('supertest');
+const domainApi = 'http://localhost:3000';
 
 describe('Проверка эндпоинта', () => {
   it('/hw/store/api/checkout', async () => {
-    const response = await request('http://localhost:3000')
+    const response = await request(domainApi)
       .post('/hw/store/api/checkout')
-      .send({  });
+      .send({})
+      .expect(200);
 
-      console.log(response.body);
-    // некорректный ответ сервера
-      expect(response.body).toEqual(expect.objectContaining({ id: expect.any(Number)  }));
+    expect(response.body).toEqual(
+      expect.objectContaining({ id: expect.any(Number) })
+    );
 
-    // слишком большой номер заказа
     expect(response.body.id).toBeLessThan(10000000);
-  })
+  });
+
+  it('/hw/store/api/products должен возвращать массив объектов с правильными свойствами', async () => {
+    const response = await request(domainApi)
+      .get('/hw/store/api/products')
+      .expect(200);
+
+    const products = response.body;
+    expect(Array.isArray(products)).toBe(true);
+
+    expect(products).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(Number),
+          name: expect.any(String),
+          price: expect.any(Number)
+        })
+      ])
+    );
+  });
 });
