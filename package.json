@@ -2,12 +2,12 @@
     "name": "autotests-hw-with-auto-check",
     "version": "1.0.0",
     "scripts": {
+        "test": "npm run test:unit && npm run test:e2e:gui",
         "start": "nodemon ./src/server/index.ts",
         "test:unit": "jest",
         "test:e2e": "hermione",
         "test:e2e:gui": "hermione gui",
         "test:e2e:update": "hermione --update-refs",
-        "test": "npm run test:unit && npm run test:e2e",
         "build": "webpack --mode=production --node-env=production",
         "watch": "webpack --watch"
     },
