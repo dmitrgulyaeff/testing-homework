@@ -12,5 +12,5 @@ app.use(basename, router);
 app.use(basename, express.static('dist'));
 
 app.listen(port, '::', () => {
-    console.log(`Example app listening at http://localhost:${port}${basename}`);
+    console.log(`set BUG_ID = ${process.env.BUG_ID}` + `\nhttp://localhost:${port}${basename}`);
 });
